@@ -1,0 +1,7 @@
+{
+  "version": "v0.6.11",
+  "npm": true,
+  "main": "app.js",
+  "args": ["Hello NodeNinja"],
+  "envs": {"listenport": "1337"}
+}
