@@ -12,18 +12,16 @@
   <body>
 
   <h1>socket.ioのサンプルプログラム</h1>
-  <div id="enter">
+  <div id="cover">
     <div id="enterform">
       <input type="text" id="entertext">
-      <button id="enterbtn">入室</button>
     </div>
   </div>
   <br>
+  <div id="userlist"></div>
   <div id="chatform">
-  <input type="text" id="message" value="">
-  <button>メッセージをそうしん</button>
-  <input type="button" value="切断する" onclick="DisConnect()">
-  <div id="receiveMsg"></div>
+  <textarea id="message" placeholder="メッセージを入力"></textarea>
+  <div id="chatlist"></div>
   </div>
   </body>
 </html>
