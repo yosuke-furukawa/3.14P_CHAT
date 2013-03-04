@@ -1,6 +1,5 @@
-body {
-    padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+* {
+font-family: "メイリオ",sans-serif;
 }
 
 a {
@@ -20,12 +19,12 @@ a {
 #enterform {
     background-color: #ffffff;
     width: 500px;
-    height: 70px;
+    height: 100px;
     top: 50px;
 }
 #enterform input{
-    width: 500px;
-    font-size: 70px;
+    width: 470px;
+    font-size: 30px;
 }
 
 #textarea {
@@ -64,10 +63,24 @@ button {
     border-radius: 5px;
 }
 #userlist {
-    position: fixed;
-    top: 0px;
-    right: 0px;
+    position: absolute;
     width: 100px;
     height: 100px;
     background-color: #ff9900;
+    top: 0px;
+    right: 0px;
+}
+
+#status {
+    width: 300px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    background-color: #0077dd;
+    padding: 15px;
+    position: absolute;
+    left: 210px;
+    top: -50px;
+    -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }

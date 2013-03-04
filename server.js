@@ -49,18 +49,18 @@ var io = socketIO.listen(server, {
 });
 var _userid = 0
 ,sessionlist = new Array()
-,userlist = new Array();
+,userList = new Array();
 
 io.sockets.on('connection', function(socket) {
     socket.on('enter', function(data) {
         var name = data.name;
         socket.handshake.username = name;
-        sessionlist[name] = socket.id;
-        userlist.push(name);
+        io.sockets.socket(socket.id).emit("list" ,userList);
         socket.broadcast.emit('login', {
             username: socket.handshake.username
         });
-        io.sockets.socket(socket.id).emit("list" ,userlist);
+        sessionlist[name] = socket.id;
+        userList.push(name)
     });
     socket.on('message', function(data) {
         var date = new Date();
@@ -77,9 +77,11 @@ io.sockets.on('connection', function(socket) {
             username: socket.handshake.username
         });
         delete sessionlist[socket.handshake.username];
-        for(var i=1;i<userlist;i++){
-            if(userlist[i] == socket.handshake.username){
-                userlist.splice(i,1);
+        var len = userList.length - 1;
+        var i;
+        for(i = len; i >= 0; i--){
+            if(userList[i] == socket.handshake.username){
+                userList.splice(i,1);
             }
         }
         socket.handshake.username = "";

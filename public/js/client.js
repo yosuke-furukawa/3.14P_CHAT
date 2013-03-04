@@ -1,12 +1,51 @@
-var socket = io.connect('http://localhost:1337');
+var socket;
+if (location.hostname === "localhost") {
+    socket = io.connect('http://localhost:1337');
+} else if(location.hostname === "3-14p.c.node-ninja.com") {
+    socket = io.connect('http://3-14p.c.node-ninja.com');
+}
+location.hash = "";
+
+function showStatus(message) {
+    $("#status")
+    .text(message)
+    .animate({
+        top: "40px"
+    },1000)
+    .animate({
+        top: "30px"
+    },500)
+    .delay(2000)
+    .animate({
+        top: "-100px"
+    }).click(function () {
+        $("#status").stop(true,false)
+        .animate({
+            top: "-100px"
+        });
+    });
+}
+
 socket.on('connect', function(data) {  //接続したら
     $("#cover").fadeIn();
     function enter(){
-        
-        socket.emit("enter", {
-            name:$("#entertext").val()
+        var name = $("#entertext").val();
+        if (name !== "") {
+            socket.emit("enter", {
+                name: name
+            });
+            $("#cover").fadeOut();
+        }else{
+            $("#enterform p").css("color","red");
+        }
+        socket.on('login', function(data) {
+            showStatus(data.username + "がログインしたお");
+            $("#userlist")
+            .append('<a href="#' + data.username +'">' + data.username +"さん</a><br>");
         });
-        $("#cover").fadeOut();
+        socket.on("logout", function(data){
+            showStatus(data.username + "がログアウトしたお");
+        });
     }
     $("#enterform button").click(enter);
     
@@ -14,7 +53,7 @@ socket.on('connect', function(data) {  //接続したら
         if ((e.which && e.which === 13) ||
             (e.keyCode && e.keyCode === 13)) {
             var msg = $("#message").val();
-            if(msg !=="") {
+            if(msg !=="" || msg !== "\n") {
                 socket.emit('message', {
                     username: location.hash.replace("#",""),
                     message: msg
@@ -48,13 +87,10 @@ socket.on('connect', function(data) {  //接続したら
         audio.src = "http://taira-komori.jpn.org/sfxr/sfxrse/01pickup/coin01.mp3";
         audio.play();
     });
-    socket.on('login', function(data) {
-        //(ry
-    });
     socket.on('list', function(data) {
-        for(var i=1;i<data.length;i++){
-            $('<a href="#' + i +">" + i +"番目の人</a>" )
-            .appendTo("#userlist");
+        for (d in data) {
+            $("#userlist")
+            .append('<a href="#' + data[d] +'">' + data[d] +"さん</a><br>");
         }
     });
 });

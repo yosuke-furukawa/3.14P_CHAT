@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <head>
+        <meta charset="UTF-8">
+        <title><%= title %></title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
         <script src="/socket.io/socket.io.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <script type="text/javascript" src="js/client.js"></script>
 
-  </head>
-  <body>
+    </head>
+    <body>
 
-  <h1>socket.ioのサンプルプログラム</h1>
-  <div id="cover">
-    <div id="enterform">
-      <input type="text" id="entertext">
-    </div>
-  </div>
-  <br>
-  <div id="userlist"></div>
-  <div id="chatform">
-  <textarea id="message" placeholder="メッセージを入力"></textarea>
-  <div id="chatlist"></div>
-  </div>
-  </body>
+        <h1>socket.ioのサンプルプログラム</h1>
+        <div id="cover">
+            <div id="enterform">
+                <input type="text" id="entertext">
+                <p>名前を上に打ってEnterで入室</p>
+            </div>
+        </div>
+        <div id="status"></div>
+        <br>
+        <div id="userlist"></div>
+        <div id="chatform">
+            <textarea id="message" placeholder="メッセージを入力"></textarea>
+            <div id="chatlist"></div>
+        </div>
+    </body>
 </html>
