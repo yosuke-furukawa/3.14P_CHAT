@@ -11,7 +11,6 @@ var express = require('express')
 var app = express();
 
 app.configure(function(){
-    app.set('port', process.env.listenport || 1337);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'ejs');
     app.use(express.favicon());
@@ -28,8 +27,12 @@ app.configure(function(){
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 });
+app.configure("production",function(){
+    app.set('port', process.env.PORT || 80);
+});
 
 app.configure('development', function(){
+    app.set('port', process.env.listenport || 1337);
     app.use(express.errorHandler());
 });
 
