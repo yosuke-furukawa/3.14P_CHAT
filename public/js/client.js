@@ -1,7 +1,7 @@
 var socket;
 if (location.hostname === "localhost") {
     socket = io.connect('http://localhost:1337');
-} else if(location.hostname === "3-14p.c.node-ninja.com") {
+} else {
     socket = io.connect('http://3-14p.c.node-ninja.com');
 }
 location.hash = "";
@@ -26,72 +26,70 @@ function showStatus(message) {
     });
 }
 
-socket.on('connect', function(data) {  //接続したら
-    $("#cover").fadeIn();
-    function enter(){
-        var name = $("#entertext").val();
-        if (name !== "") {
-            socket.emit("enter", {
-                name: name
-            });
-            $("#cover").fadeOut();
-        }else{
-            $("#enterform p").css("color","red");
-        }
-        socket.on('login', function(data) {
-            showStatus(data.username + "がログインしたお");
-            $("#userlist")
-            .append('<a href="#' + data.username +'">' + data.username +"さん</a><br>");
+function sendMessage(parameters) {
+    var msg = $("#message").val();
+    if(msg !=="" || msg !== "\n") {
+        socket.emit('message', {
+            userid: location.hash.replace("#",""),
+            message: msg
         });
-        socket.on("logout", function(data){
-            showStatus(data.username + "がログアウトしたお");
-        });
+        var date = new Date();
+        $('<div class="chatnaiyou"></div>')
+        .html( "<span class='userid'>自分</span>"
+            + "<span class='date'>" + Math.round(date.getTime() / 1000) +"</span>"
+            + "<div class='message'>" + msg +"</span>")
+        .prependTo('#chatlist');
     }
-    $("#enterform button").click(enter);
+    $("#message").val("");
+}
+
+socket.on('connect', function(data) {  //接続したら
+    socket.on('login', function(data) {
+        showStatus(data.userid + "がログインしたお");
+        $("#userlist")
+        .append('<li><a href="#' + data.userid +'">' + data.userid +"さん</a></li>");
+    });
+    socket.on("logout", function(data){
+        showStatus(data.userid + "がログアウトしたお");
+        $("#userlist").each(function() {
+            if ($(this).find("li a").html() === data.userid + "さん") {
+                console.log($(this).find("li").remove());
+            }
+        });
+    });
     
     $("#message").keypress(function (e){
         if ((e.which && e.which === 13) ||
             (e.keyCode && e.keyCode === 13)) {
-            var msg = $("#message").val();
-            if(msg !=="" || msg !== "\n") {
-                socket.emit('message', {
-                    username: location.hash.replace("#",""),
-                    message: msg
-                });
-                var date = new Date();
-                $('<div class="chatnaiyou"></div>')
-                .html( "<span class='userid'>自分</span>"
-                    + "<span class='date'>" + Math.round(date.getTime() / 1000) +"</span>"
-                    + "<div class='message'>" + msg +"</span>")
-                .prependTo('#chatlist');
-            }
-            $("#message").val("");
+            sendMessage();
+        }else{
+            socket.emit("editing",{
+                userid: location.hash.replace("#",""),
+                message: $("#message").val()
+            });
         }
     });
-    $("#entertext").keypress(function(e){
-        if ((e.which && e.which === 13) ||
-            (e.keyCode && e.keyCode === 13)) {
-            enter();
-            return false;
-        } else {
-            return true;
-        }
-    });
+    var audio = new Audio();
+    audio.src = "http://taira-komori.jpn.org/sfxr/sfxrse/01pickup/coin01.mp3";
     socket.on('message', function(data) {
         $('<div class="chatnaiyou"></div>')
-        .html( "<span class='userid'>" + data.username +"</span>"
+        .html( "<span class='userid'>" + data.userid +"</span>"
             + "<span class='date'>" + data.date +"</span>"
             + "<div class='message'>" + data.message +"</span>")
         .prependTo('#chatlist');
-        var audio = new Audio();
-        audio.src = "http://taira-komori.jpn.org/sfxr/sfxrse/01pickup/coin01.mp3";
+        
         audio.play();
     });
     socket.on('list', function(data) {
         for (d in data) {
             $("#userlist")
-            .append('<a href="#' + data[d] +'">' + data[d] +"さん</a><br>");
+            .append('<li><a href="#' + data[d] +'">' + data[d] +"さん</a></li>");
         }
     });
+});
+
+socket.on("error", function (err) {
+    showStatus("エラー　エラー情報は、コンソールに入ってるお");
+    console.log(err);
 });
 
