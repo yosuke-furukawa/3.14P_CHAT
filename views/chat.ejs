@@ -6,21 +6,56 @@
         <link rel='stylesheet' href='/stylesheets/style.css' />
         <script src="/socket.io/socket.io.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-        <script type="text/javascript" src="js/client.js"></script>
+        <link rel="stylesheet" href="stylesheets/base/jquery.ui.all.css">
+        <script src="js/jqueryui/ui/jquery.ui.position.js"></script>
+        <script src="js/jqueryui/ui/jquery.ui.core.js"></script>
+        <script src="js/jqueryui/ui/jquery.ui.widget.js"></script>
+        <script src="js/jqueryui/ui/jquery.ui.button.js"></script>
+        <script src="js/jqueryui/ui/jquery.ui.tabs.js"></script>
+        <script src="js/jqueryui/ui/jquery.ui.dialog.js"></script>
 
+        <style>
+            /*reset*/
+            /* YUI 3.5.0 reset.css (http://developer.yahoo.com/yui/3/cssreset/) - http://cssreset.com */
+            html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}input,textarea,select{font-size:100%}legend{color:#000}#yui3-css-stamp.cssreset{display:none}
+        </style>
+        <style>
+            #tabs {
+                font-size: 100%;
+            }
+
+            .demo-description {
+                clear: both;
+                padding: 12px;
+                font-size: 1.3em;
+                line-height: 1.4em;
+            }
+
+            .ui-draggable, .ui-droppable {
+                background-position: top;
+            }
+
+            #dialog label, #dialog input { display:block; }
+            #dialog label { margin-top: 0.5em; }
+            #dialog input, #dialog textarea { width: 95%; }
+            #tabs li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+        </style>
     </head>
     <body>
-
-        <h1><%= title %></h1>
-        <div id="cover">
-            
-        </div>
-        <div id="status"></div>
-        <br>
+        <div id="menucolumn">
         <ul id="userlist"></ul>
-        <div id="chatform">
-            <textarea id="message" placeholder="メッセージを入力"></textarea>
-            <div id="chatlist"></div>
         </div>
+        <div id="maincolumn">
+            <div id="tabs">
+                <ul>
+                    <li><a href="#tabs-1">ホーム</a></li>
+                </ul>
+                <div id="tabs-1">
+                    <p>工事中</p>
+
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="js/ui.js"></script>
     </body>
 </html>

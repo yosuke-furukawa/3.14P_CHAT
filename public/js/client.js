@@ -8,6 +8,7 @@ location.hash = "";
 
 function showStatus(message) {
     $("#status")
+    .stop(true,false)
     .text(message)
     .animate({
         top: "40px"
@@ -28,7 +29,7 @@ function showStatus(message) {
 
 function sendMessage(parameters) {
     var msg = $("#message").val();
-    if(msg !=="" || msg !== "\n") {
+    if(msg !="" || msg != "\n") {
         socket.emit('message', {
             userid: location.hash.replace("#",""),
             message: msg
@@ -36,11 +37,15 @@ function sendMessage(parameters) {
         var date = new Date();
         $('<div class="chatnaiyou"></div>')
         .html( "<span class='userid'>自分</span>"
-            + "<span class='date'>" + Math.round(date.getTime() / 1000) +"</span>"
-            + "<div class='message'>" + msg +"</span>")
+            + "<span class='date'>" + date.getTime() +"</span>"
+            + "<div class='message'>" + textFormat(msg) +"</span>")
         .prependTo('#chatlist');
     }
     $("#message").val("");
+}
+
+function textFormat(text) {
+    return text.replace(/ /g, "&nbsp;").replace(/\r\n|\n|\r/g, "<br>");
 }
 
 socket.on('connect', function(data) {  //接続したら
@@ -57,6 +62,8 @@ socket.on('connect', function(data) {  //接続したら
             }
         });
     });
+    
+    $("#send").click(sendMessage)
     
     $("#message").keypress(function (e){
         if ((e.which && e.which === 13) ||
@@ -75,7 +82,7 @@ socket.on('connect', function(data) {  //接続したら
         $('<div class="chatnaiyou"></div>')
         .html( "<span class='userid'>" + data.userid +"</span>"
             + "<span class='date'>" + data.date +"</span>"
-            + "<div class='message'>" + data.message +"</span>")
+            + "<div class='message'>" + textFormat(data.message) +"</span>")
         .prependTo('#chatlist');
         
         audio.play();
@@ -86,10 +93,15 @@ socket.on('connect', function(data) {  //接続したら
             .append('<li><a href="#' + data[d] +'">' + data[d] +"さん</a></li>");
         }
     });
+    socket.on("reload", function(data){
+        //location.reload();
+    });
+
 });
 
 socket.on("error", function (err) {
     showStatus("エラー　エラー情報は、コンソールに入ってるお");
     console.log(err);
+    location.reload()
 });
 

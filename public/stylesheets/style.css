@@ -5,15 +5,8 @@ font-family: "メイリオ",sans-serif;
 a {
     color: #00B7FF;
 }
-
-#cover {
-    display: none;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    position: absolute;
-    top: 0;
-    left: 0;
+body {
+    width: 99%
 }
 
 #enterform {
@@ -62,15 +55,6 @@ button {
     padding: 5px;
     border-radius: 5px;
 }
-#userlist {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background-color: #ff9900;
-    top: 0px;
-    right: 0px;
-}
-
 #status {
     width: 300px;
     border-radius: 8px;
@@ -83,8 +67,28 @@ button {
     top: -50px;
     -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.5);
     -moz-box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    z-index: 101;
 }
 
 #userlist li {
     
+}
+#menucolumn {
+    z-index: 20;
+    width: 15%;
+    height: 100%;
+    background-color: #ff9900;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#maincolumn {
+    margin-left: 15%;
+    width: 84%;
+    height: 100%;
+    padding: 0px;
+}
+#tabs {
+    height: 100%;
+    width: 100%;
 }

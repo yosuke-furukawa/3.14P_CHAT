@@ -13,6 +13,3 @@ exports.login = function (req, res) {
     res.redirect("back");
     console.log(req.session);
 };
-exports.debug = function(req, res){
-    res.send("session.userid: " + req.session.userid + "<br>");
-};

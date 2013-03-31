@@ -8,15 +8,19 @@ var express = require('express'),
     user = require('./routes/user'),
     http = require('http'),
     path = require('path');
-var sessionStore = new express.session.MemoryStore(),
-    connect = require('connect'),
+//var sessionStore = new express.session.MemoryStore();
+var MongoStore = require('connect-mongo')(express);
+var sessionStore = new MongoStore({db: "session"});
+var connect = require('connect'),
     Session = connect.middleware.session.Session;
+
 
 var app = express();
 
 app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'ejs');
+    app.set('port', 80)
     app.set('secretKey', 'mySecret');
     app.set('cookieSessionKey', 'sid');
     app.use(express.favicon());
@@ -28,21 +32,17 @@ app.configure(function() {
         key: app.get('cookieSessionKey'),
         store: sessionStore
     }));
+
     app.use(app.router);
     app.use(express.static(path.join(__dirname, 'public')));
 });
-app.configure("production", function() {
-    app.set('port', process.env.PORT || 80);
-});
 
 app.configure('development', function() {
-    app.set('port', process.env.listenport || 1337);
     app.use(express.errorHandler());
 });
 
 app.get('/', routes.index);
 app.post('/login', routes.login);
-app.get("/debug", routes.debug)
 
 server = http.createServer(app); // add
 //http.createServer(app).listen(app.get('port'), function(){ // del
@@ -58,7 +58,7 @@ var io = socketIO.listen(server, {
 var _userid = 0,
     sessionlist = new Array(),
     userList = new Array();
-
+io.sockets.emit('reload', 'data');
 io.set('authorization', function(handshakeData, callback) {
     if (handshakeData.headers.cookie) {
         //cookieを取得
@@ -96,7 +96,6 @@ io.set('authorization', function(handshakeData, callback) {
 });
 
 io.sockets.on('connection', function(socket) {
-    console.log(socket.handshake.session);
     var intervalID = setInterval(function() {
         // 一度セッションを再読み込み
         socket.handshake.session.reload(function() {
@@ -113,12 +112,11 @@ io.sockets.on('connection', function(socket) {
     userList.push(socket.handshake.session.userid)
 
     socket.on('message', function(data) {
-        var date = new Date();
         console.log("message");
         io.sockets.socket(sessionlist[data.userid]).emit('message', {
             userid: socket.handshake.session.userid,
             message: data.message,
-            date: Math.round((new Date()).getTime() / 1000)
+            date: (new Date()).getTime()
         });
     });
 
