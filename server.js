@@ -20,7 +20,7 @@ var app = express();
 app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'ejs');
-    app.set('port', 80)
+    app.set('port', 8080)
     app.set('secretKey', 'mySecret');
     app.set('cookieSessionKey', 'sid');
     app.use(express.favicon());
@@ -53,7 +53,8 @@ server.listen(app.get('port'), function() { //add
 // Socket.IO スタート
 var socketIO = require('socket.io');
 var io = socketIO.listen(server, {
-    'log level': 2
+    'log level': 2,
+    'transports':['xhr-polling'] //xhr-pollingで固定
 });
 var _userid = 0,
     sessionlist = new Array(),
@@ -128,6 +129,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('disconnect', function() {
+        console.log("disconnect");
         socket.broadcast.emit('logout', {
             userid: socket.handshake.session.userid
         });

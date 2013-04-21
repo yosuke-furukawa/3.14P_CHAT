@@ -63,7 +63,7 @@ tabs.bind( "keyup", function( event ) {
 
 var socket;
 if (location.hostname === "localhost") {
-    socket = io.connect('http://localhost:1337');
+    socket = io.connect('http://localhost:8080', {"sync disconnect on unload": true});
 } else {
     socket = io.connect('http://3-14p.c.node-ninja.com');
 }
